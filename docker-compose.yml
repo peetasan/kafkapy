@@ -1,0 +1,83 @@
+version: '2'
+
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+
+  kafka1:
+    image: wurstmeister/kafka
+    container_name: kafka1
+    links:
+      - zookeeper:zookeeper
+      - kafka2:kafka2
+      - kafka3:kafka3
+      - kafka4:kafka4
+    environment:
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_ADVERTISED_HOST_NAME=kafka1
+      - KAFKA_ADVERTISED_PORT=9092
+      - HOST_IP=localhost
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CREATE_TOPICS=mytopic:12:3
+    depends_on:
+      - zookeeper
+
+  kafka2:
+    image: wurstmeister/kafka
+    container_name: kafka2
+    links:
+      - zookeeper:zookeeper
+      - kafka3:kafka3
+      - kafka4:kafka4
+    # ports:
+    #   - 9092:9093
+    environment:
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_ADVERTISED_HOST_NAME=kafka2
+      - KAFKA_ADVERTISED_PORT=9092
+      - HOST_IP=localhost
+      - KAFKA_BROKER_ID=2
+    depends_on:
+      - zookeeper
+
+  kafka3:
+    image: wurstmeister/kafka
+    container_name: kafka3
+    links:
+      - zookeeper:zookeeper
+      - kafka4:kafka4
+    # ports:
+    #   - 9092:9094
+    environment:
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_ADVERTISED_HOST_NAME=kafka3
+      - KAFKA_ADVERTISED_PORT=9092
+      - HOST_IP=localhost
+      - KAFKA_BROKER_ID=3
+    depends_on:
+      - zookeeper
+
+  kafka4:
+    image: wurstmeister/kafka
+    container_name: kafka4
+    links:
+      - zookeeper:zookeeper
+    # ports:
+    #   - 9092:9095
+    environment:
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_ADVERTISED_HOST_NAME=kafka4
+      - KAFKA_ADVERTISED_PORT=9092
+      - HOST_IP=localhost
+      - KAFKA_BROKER_ID=4
+    depends_on:
+      - zookeeper
+
+  app:
+    image: pykafka
+    container_name: producer
+    depends_on:
+      - kafka1
+      - kafka2
+      - kafka3
+      - kafka4

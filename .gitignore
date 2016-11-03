@@ -1,3 +1,4 @@
+<<<<<<< adac9bbb6a076ad1eefd763532bf3c0cda53dbff
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -79,7 +80,7 @@ celerybeat-schedule
 .env
 
 # virtualenv
-venv/
+virtualenv/
 ENV/
 
 # Spyder project settings
@@ -87,3 +88,4 @@ ENV/
 
 # Rope project settings
 .ropeproject
+.idea
